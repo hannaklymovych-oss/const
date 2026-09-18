@@ -1,2 +1,186 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+
+// Інтерфейс Weapon
+
+class Weapon
+{
+public:
+    virtual void attack() = 0;
+    virtual string getName() = 0;
+
+    virtual ~Weapon() {}
+};
+
+
+// Конкретні види зброї
+
+class Cutlass : public Weapon
+{
+public:
+    void attack() override
+    {
+        cout << "Attack with a cutlass!" << endl;
+    }
+
+    string getName() override
+    {
+        return "Cutlass";
+    }
+};
+
+
+class Bow : public Weapon
+{
+public:
+    void attack() override
+    {
+        cout << "Shoot an arrow!" << endl;
+    }
+
+    string getName() override
+    {
+        return "Bow";
+    }
+};
+
+
+class Harpoon : public Weapon
+{
+public:
+    void attack() override
+    {
+        cout << "Throw a harpoon!" << endl;
+    }
+
+    string getName() override
+    {
+        return "Harpoon";
+    }
+};
+
+
+class Flintlock : public Weapon
+{
+public:
+    void attack() override
+    {
+        cout << "Fire the flintlock!" << endl;
+    }
+
+    string getName() override
+    {
+        return "Flintlock";
+    }
+};
+
+
+// Абстрактний клас Character
+
+class Character
+{
+protected:
+    Weapon* weapon = nullptr;
+
+public:
+    virtual ~Character()
+    {
+        delete weapon;
+    }
+
+    // Зміна зброї під час гри
+    void setWeapon(Weapon* newWeapon)
+    {
+        delete weapon;
+        weapon = newWeapon;
+
+        cout << "Weapon changed to: "
+             << weapon->getName() << endl;
+    }
+
+    void attack()
+    {
+        if (weapon)
+            weapon->attack();
+        else
+            cout << "No weapon!" << endl;
+    }
+
+    virtual void showInfo() = 0;
+};
+
+
+// Персонажі
+
+class Explorer : public Character
+{
+public:
+    void showInfo() override
+    {
+        cout << "Explorer" << endl;
+    }
+};
+
+
+class Pirate : public Character
+{
+public:
+    void showInfo() override
+    {
+        cout << "Pirate" << endl;
+    }
+};
+
+
+class Hunter : public Character
+{
+public:
+    void showInfo() override
+    {
+        cout << "Hunter" << endl;
+    }
+};
+
+
+class TreasureHunter : public Character
+{
+public:
+    void showInfo() override
+    {
+        cout << "Treasure Hunter" << endl;
+    }
+};
+
+
+// Демонстрація роботи
+
+int main()
+{
+    Explorer explorer;
+
+    cout << "=== MYSTERIOUS ISLAND ===" << endl;
+
+    explorer.showInfo();
+
+    explorer.setWeapon(new Bow());
+    explorer.attack();
+
+    cout << endl;
+
+    cout << "The explorer found a pirate ship!" << endl;
+
+    explorer.setWeapon(new Flintlock());
+    explorer.attack();
+
+    cout << endl;
+
+    cout << "The explorer reached the ocean..." << endl;
+
+    explorer.setWeapon(new Harpoon());
+    explorer.attack();
+
+    return 0;
+}
